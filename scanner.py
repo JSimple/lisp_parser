@@ -32,6 +32,14 @@ def scan(source):
     def peek():
         if is_at_end(): return '\r' ## does any NPC work here? or do I need a null carachter?
 
+    ### STRING SCANNING HELPER FUNCTION ###
+    def string():
+        pass
+
+    ### NUMBER SCANNING HELPER FUNCTION ###
+    def number():
+        pass
+
     ### INNER LOOP ###
     def scan_token():
         nonlocal line
@@ -62,6 +70,9 @@ def scan(source):
             case ';':
                 while peek() != '\n' and not is_at_end():
                     advance()
+            
+            # STRINGS
+            case '"': string()
 
             # DEFAULT CASE
             case _:
