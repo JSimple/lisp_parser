@@ -22,6 +22,7 @@ def scan(source):
         token_list.append(Token(type, lexeme, literal, line))
 
     def char_matches(expected):
+        nonlocal current
         if is_at_end():
             return False
         if source[current] != expected:
@@ -31,10 +32,17 @@ def scan(source):
     
     def peek():
         if is_at_end(): return '\r' ## does any NPC work here? or do I need a null carachter?
+        return source[current]
 
     ### STRING SCANNING HELPER FUNCTION ###
     def string():
-        pass
+        nonlocal current
+        while peek() is not '"':
+            if peek() is '\n' or is_at_end(): # this scanner does not allow for multi-line strings
+                raise Exception(line, "Unterminated string.")
+            else:
+                advance() # make sure I'm clear on why this isn't just current += 1
+        add_token(Types.STRING, source[start + 1:current - 1])
 
     ### NUMBER SCANNING HELPER FUNCTION ###
     def number():
