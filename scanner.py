@@ -16,14 +16,25 @@ def scan(source):
         char = source[current]
         current += 1
         return char
-
     
     def add_token(type, literal = None):
         lexeme = source[start:current]
         token_list.append(Token(type, lexeme, literal, line))
 
+    def char_matches(expected):
+        if is_at_end():
+            return False
+        if source[current] != expected:
+            return False
+        current += 1
+        return True
+    
+    def peek():
+        if is_at_end(): return '\r' ## does any NPC work here? or do I need a null carachter?
+
     ### INNER LOOP ###
     def scan_token():
+        nonlocal line
         char = advance()
         match char:
             # SINGLE CHAR TOKENS
@@ -34,8 +45,23 @@ def scan(source):
             case '-': add_token(Types.MINUS)
             case '+': add_token(Types.PLUS)
             case "'": add_token(Types.SINGLE_QUOTE)
-            case ';': add_token(Types.SEMICOLON)
             case '*': add_token(Types.STAR)
+
+            # TOKENS THAT CAN BE SINGLE OR DOUBLE CHAR
+            case '>': add_token(Types.GREATER_EQUAL if char_matches('=') else Types.GREATER)
+            case '<': add_token(Types.LESS_EQUAL if char_matches('=') else Types.LESS)
+            case '/': add_token(Types.SLASH_EQUAL if char_matches('=') else Types.SLASH)
+
+            # WHITESPASES
+            case ' ': pass
+            case '\r': pass
+            case '\t': pass
+            case '\n': line += 1
+
+            # COMMENTS
+            case ';':
+                while peek() != '\n' and not is_at_end():
+                    advance()
 
             # DEFAULT CASE
             case _:
@@ -46,5 +72,5 @@ def scan(source):
     while not is_at_end():
         start = current
         scan_token()
-    token_list.append(Token(EOF,'', None, line))
+    token_list.append(Token(Types.EOF,'', None, line))
 

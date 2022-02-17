@@ -24,6 +24,7 @@ class Types(Enum):
     RIGHT_PAREN = auto()
     COMMA = auto()
     DOT = auto()
+    EQUAL = auto()
     MINUS = auto()
     PLUS = auto()
     SINGLE_QUOTE = auto()
@@ -31,7 +32,6 @@ class Types(Enum):
     STAR = auto()
 
     #TOKENS THAT CAN BE ONE OR TWO CHARS
-    EQUAL = auto()
     GREATER = auto()
     GREATER_EQUAL = auto()
     LESS = auto()
@@ -56,6 +56,7 @@ class Types(Enum):
     NOT = auto()
     OR = auto()
     PRINT = auto()
+    T = auto()
     VAR = auto()
     WRITE = auto()
 
