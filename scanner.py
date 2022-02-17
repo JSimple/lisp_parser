@@ -1,4 +1,4 @@
-from token import Token
+from test import plus, Plusser, Token, Types
 
 ### SCANNER / LEXER FUNCTION ###
 def scan(source):
@@ -18,7 +18,7 @@ def scan(source):
         return char
 
     
-    def add_token(type, literal):
+    def add_token(type, literal = None):
         lexeme = source[start:current]
         token_list.append(Token(type, lexeme, literal, line))
 
@@ -26,8 +26,20 @@ def scan(source):
     def scan_token():
         char = advance()
         match char:
-            case '(':
-                add_token(LEFT_PAREN)
+            # SINGLE CHAR TOKENS
+            case '(': add_token(Types.LEFT_PAREN)
+            case ')': add_token(Types.RIGHT_PAREN)
+            case ',': add_token(Types.COMMA)
+            case '.': add_token(Types.DOT)
+            case '-': add_token(Types.MINUS)
+            case '+': add_token(Types.PLUS)
+            case "'": add_token(Types.SINGLE_QUOTE)
+            case ';': add_token(Types.SEMICOLON)
+            case '*': add_token(Types.STAR)
+
+            # DEFAULT CASE
+            case _:
+                raise Exception(line, "Unexpected character.")
 
 
     ### OUTER LOOP ###

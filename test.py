@@ -1,5 +1,11 @@
 from enum import Enum, auto
-### TOKEN CLASS DEFINITION ###
+
+def plus(a,b):
+    return a+b
+
+class Plusser:
+    def __init__(self, a, b) -> None:
+        self.added = a + b
 
 class Token:
     def __init__(self, type, lexeme, literal, line ) -> None:
@@ -7,12 +13,12 @@ class Token:
         self.lexeme = lexeme
         self.literal = literal
         self.line = line
-
+    
     def toString(self):
         return f"{self.type} {self.lexeme} {self.literal}"
 
-### TOKEN TYPES ###
 class Types(Enum):
+    
     # SINGLE CHAR TOKENS
     LEFT_PAREN = auto()
     RIGHT_PAREN = auto()
@@ -20,8 +26,8 @@ class Types(Enum):
     DOT = auto()
     MINUS = auto()
     PLUS = auto()
-    SEMICOLON = auto()
     SINGLE_QUOTE = auto()
+    SEMICOLON = auto()
     STAR = auto()
 
     #TOKENS THAT CAN BE ONE OR TWO CHARS
