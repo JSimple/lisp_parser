@@ -33,6 +33,10 @@ def scan(source):
     def peek():
         if is_at_end(): return '\r' ## does any NPC work here? or do I need a null carachter?
         return source[current]
+    
+    def is_digit(char):
+        digits = {'0','1','2','3','4','5','6','7','8','9'} # this will allow for non-zero numbers to start w 0
+        return char in digits
 
     ### STRING SCANNING HELPER FUNCTION ###
     def string():
@@ -46,7 +50,16 @@ def scan(source):
 
     ### NUMBER SCANNING HELPER FUNCTION ###
     def number():
-        pass
+        while is_digit(peek()):
+            advance()
+        if peek() == ' ' or ')': # what do do about \n?
+            value = int(source[start:current - 1])
+            add_token(Types.NUMBER, value)
+        else:
+            raise Exception(line, "Unexpected carachter.")
+        # continue advancing while peek() is a digit 
+        # if peek() is a space then addd the token
+        # else throw an unexpected char error
 
     ### INNER LOOP ###
     def scan_token():

@@ -49,6 +49,7 @@ class Types(Enum):
     DEFCONSTANT = auto()
     DEFUN = auto()
     DEFVAR = auto()
+    IF = auto()
     LET = auto()
     MAX = auto()
     MIN = auto()

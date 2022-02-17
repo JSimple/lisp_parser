@@ -12,7 +12,7 @@ class Token:
         return f"{self.type} {self.lexeme} {self.literal}"
 
 ### TOKEN TYPES ###
-class Types(Enum):
+class Types(Enum):  ## why not just create a dictionary right off the bat?
     # SINGLE CHAR TOKENS
     LEFT_PAREN = auto()
     RIGHT_PAREN = auto()
