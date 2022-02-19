@@ -1,4 +1,4 @@
-from test import Types
+from .token import Types
 
 keywords = {
     'and' : Types.AND,

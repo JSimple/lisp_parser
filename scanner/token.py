@@ -1,12 +1,5 @@
 from enum import Enum, auto
 
-def plus(a,b):
-    return a+b
-
-class Plusser:
-    def __init__(self, a, b) -> None:
-        self.added = a + b
-
 class Token:
     def __init__(self, type, lexeme, literal, line ) -> None:
         self.type = type
@@ -14,8 +7,8 @@ class Token:
         self.literal = literal
         self.line = line
     
-    def toString(self):
-        return f"{self.type} {self.lexeme} {self.literal}"
+    def __repr__(self):
+        return f" |type:{self.type} lexeme:{self.lexeme} literal:{self.literal}| "
 
 class Types(Enum):
     

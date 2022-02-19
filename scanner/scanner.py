@@ -1,5 +1,5 @@
-from test import plus, Plusser, Token, Types
-from keyword import keywords
+from .token import Token, Types
+from .keywords import keywords
 
 ### SCANNER / LEXER FUNCTION ###
 def scan(source):
@@ -35,6 +35,7 @@ def scan(source):
         if is_at_end(): return '\r' ## does any NPC work here? or do I need a null carachter?
         return source[current]
     
+    ### LOOK UP CORROSPONDING PY STRING METHODS
     def is_digit(char):
         digits = {'0','1','2','3','4','5','6','7','8','9'} # this will allow for non-zero numbers to start w 0
         return char in digits
@@ -47,12 +48,12 @@ def scan(source):
 
     # STRING SCANNING HELPER FUNCTION #
     def string():
-        nonlocal current
-        while peek() is not '"':
-            if peek() is '\n' or is_at_end(): # this scanner does not allow for multi-line strings
+        while peek() != '"':
+            if peek() == '\n' or is_at_end(): # this scanner does not allow for multi-line strings
                 raise Exception(line, "Unterminated string.")
             else:
                 advance() # make sure I'm clear on why this isn't just current += 1
+        advance()
         value = source[start + 1:current - 1]
         add_token(Types.STRING, value)
 
@@ -61,7 +62,7 @@ def scan(source):
         while is_digit(peek()):
             advance()
         if peek() == ' ' or ')': # what do do about \n?
-            value = int(source[start:current - 1])
+            value = int(source[start:current])
             add_token(Types.NUMBER, value)
         else:
             raise Exception(line, "Unexpected carachter.")
@@ -130,3 +131,15 @@ def scan(source):
         start = current
         scan_token()
     token_list.append(Token(Types.EOF,'', None, line))
+
+    return token_list
+
+## TEST CASES ##
+
+source1 = '(write 1 2 3 "string")'
+source2 = '(0(3(1(+->='
+souce3 = '()(())'
+
+parsed = scan(source2)
+
+print(parsed)
