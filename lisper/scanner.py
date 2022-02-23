@@ -1,5 +1,4 @@
 from .token import Token, Types
-from .keywords import keywords
 
 ### SCANNER / LEXER FUNCTION ###
 def scan(source):
@@ -21,30 +20,20 @@ def scan(source):
     def add_token(type, literal = None):
         lexeme = source[start:current]
         token_list.append(Token(type, lexeme, literal, line))
-
-    def char_matches(expected):
-        nonlocal current
-        if is_at_end():
-            return False
-        if source[current] != expected:
-            return False
-        current += 1
-        return True
     
     def peek():
         if is_at_end(): return '\r' ## does any NPC work here? or do I need a null carachter?
         return source[current]
     
     ### LOOK UP CORROSPONDING PY STRING METHODS
-    def is_digit(char):
-        digits = {'0','1','2','3','4','5','6','7','8','9'} # this will allow for non-zero numbers to start w 0
-        return char in digits
-
-    def is_letter(char):
-        return char == '_' or (char >= 'a' and char <= 'z')
     
-    def is_alphanumeric(char):
-        return is_letter(char) or is_digit(char)
+    def is_symbolic(char):
+        return (
+            char == "!" or 
+            (char >= "~" and char <= "`") or
+            (char >= "*" and char <= ":") or 
+            (char >= "<" and char <= "~")
+            )
 
     # STRING SCANNING HELPER FUNCTION #
     def string():
@@ -59,7 +48,7 @@ def scan(source):
 
     # NUMBER SCANNING HELPER FUNCTION #
     def number():
-        while is_digit(peek()):
+        while peek().isdigit():
             advance()
         if peek() == ' ' or ')': # what do do about \n?
             value = int(source[start:current])
@@ -68,17 +57,12 @@ def scan(source):
             raise Exception(line, "Unexpected carachter.")
 
     # IDENTIFIER & KEYWORD SCANNING HELPER FUNCTION #
-    def identifier():
+    def symbol():
         nonlocal current
-        while is_alphanumeric(peek()):
+        while is_symbolic(peek()):
             advance()
-        text = source[start:current]
-        if text in set(keywords.keys()):
-            type = keywords[text]
-        else: 
-            type = Types.IDENTIFIER
+        type = Types.SYMBOL
         add_token(type)
-        
 
     ### INNER LOOP ###
     def scan_token():
@@ -88,17 +72,6 @@ def scan(source):
             # SINGLE CHAR TOKENS
             case '(': add_token(Types.LEFT_PAREN)
             case ')': add_token(Types.RIGHT_PAREN)
-            case ',': add_token(Types.COMMA)
-            case '.': add_token(Types.DOT)
-            case '-': add_token(Types.MINUS)
-            case '+': add_token(Types.PLUS)
-            case "'": add_token(Types.SINGLE_QUOTE)
-            case '*': add_token(Types.STAR)
-
-            # TOKENS THAT CAN BE SINGLE OR DOUBLE CHAR
-            case '>': add_token(Types.GREATER_EQUAL if char_matches('=') else Types.GREATER)
-            case '<': add_token(Types.LESS_EQUAL if char_matches('=') else Types.LESS)
-            case '/': add_token(Types.SLASH_EQUAL if char_matches('=') else Types.SLASH)
 
             # WHITESPASES
             case ' ': pass
@@ -117,11 +90,11 @@ def scan(source):
             # DEFAULT CASE
             case _:
                 # NUMBERS
-                if is_digit(char):
+                if char.isdigit():
                     number()
                 # IDENTIFIERS & KEYWORDS
-                elif is_letter(char):
-                    identifier()
+                elif is_symbolic(char):
+                    symbol()
                 else:
                     raise Exception(line, "Unexpected character.")
 
@@ -138,8 +111,8 @@ def scan(source):
 
 source1 = '(write 1 2 3 "string")'
 source2 = '(0(3(1(+->='
-souce3 = '()(())'
+source3 = '(list 1 (* 3 2) nil)'
 
-parsed = scan(source2)
+parsed = scan(source3)
 
 print(parsed)
