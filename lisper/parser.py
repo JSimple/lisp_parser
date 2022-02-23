@@ -20,6 +20,8 @@ def parse(token_list):
                 stack.append([])
             case Types.RIGHT_PAREN :
                 temp = stack.pop()
+                if stack == []:
+                    raise Exception("Unbalanced parentheses!!")
                 stack[-1].append(temp)
             case Types.NUMBER :
                 stack[-1].append(token.literal)
