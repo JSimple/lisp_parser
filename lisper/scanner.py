@@ -115,4 +115,4 @@ source3 = '(list 1 (* 3 2) nil)'
 
 parsed = scan(source3)
 
-print(parsed)
+#print(parsed)
