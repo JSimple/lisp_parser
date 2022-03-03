@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "scanner: scanner.scanner",
+            "name": "lisper: lisper.parser",
             "type": "python",
             "request": "launch",
-            "module": "scanner.scanner"
+            "module": "lisper.parser"
         }
     ]
 }

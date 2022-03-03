@@ -2,6 +2,12 @@ from .token import Token, Types
 from .scanner import scan
 import functools
 
+
+#####################################################
+### DEFINING SYMBOL FUNCTION AND CLASS FOR PARSER ###
+#####################################################
+
+# caching because symbols are unique in Lisp
 @functools.cache
 def symbol(lexeme):
     return Symbol(lexeme)
@@ -11,6 +17,14 @@ class Symbol:
         self.value = value
     def __repr__(self):
         return self.value
+
+
+#######################
+### PARSER FUNCTION ###
+#######################
+
+# stack:
+# [[]]
 
 def parse(token_list):
     stack = [[]]
@@ -37,11 +51,24 @@ def parse(token_list):
     if stack != []:
         raise Exception("Unbalanced parentheses!!")
     return parsed
-        #"("means start new list
-        #")"means close current list and go to next index of parent list
-        # everything else means push x into the current list
-        # x, for nums and strs, is the token's literal
-        # x, for symbols is an instance of the symbol class w the relevant lexeme as its 
-        
+
+
+###############################
+### SCAN AND PARSE FUNCTION ###
+############################### 
+
 def scan_n_parse(source):
     return parse(scan(source))
+
+
+##################
+### TEST CASES ###
+##################
+
+lisp1 = '(defun foo (a b c d) (+ a b c d))'
+
+print(scan_n_parse(lisp1))
+
+# example: 
+# input: '(+(+ 1 2 ) 3 )'
+# output: ['+',['+', 1, 2], 3]

@@ -1,6 +1,9 @@
 from .token import Token, Types
 
+################################
 ### SCANNER / LEXER FUNCTION ###
+################################
+
 def scan(source):
     token_list = []
     start = 0
@@ -22,7 +25,7 @@ def scan(source):
         token_list.append(Token(type, lexeme, literal, line))
     
     def peek():
-        if is_at_end(): return '\r' ## does any NPC work here? or do I need a null carachter?
+        if is_at_end(): return '\r'
         return source[current]
     
     ### LOOK UP CORROSPONDING PY STRING METHODS
@@ -113,6 +116,6 @@ source1 = '(write 1 2 3 "string")'
 source2 = '(0(3(1(+->='
 source3 = '(list 1 (* 3 2) nil)'
 
-parsed = scan(source3)
+scanned = scan(source3)
 
-#print(parsed)
+#print(scanned)

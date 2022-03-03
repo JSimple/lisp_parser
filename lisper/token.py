@@ -1,5 +1,9 @@
 from enum import Enum, auto
 
+########################################################
+### DEFINING TOKEN CLASS AND TOKEN TYPES FOR SCANNER ###
+########################################################
+
 class Token:
     def __init__(self, type, lexeme, literal, line ) -> None:
         self.type = type
